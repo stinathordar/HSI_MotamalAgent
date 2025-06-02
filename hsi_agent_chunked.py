@@ -16,7 +16,7 @@ def finna_videigandi_but(spurning, butar):
     client = OpenAI()
     samanburdur = []
     for i, butur in enumerate(butar):
-        prompt = f"Hversu vel tengist eftirfarandi textabútur spurningunni "{spurning}"?\n\nTexti:\n{butur}\n\nGefðu svar á kvarðanum 0-10."
+        prompt = f"Hversu vel tengist eftirfarandi textabútur spurningunni \"{spurning}\"?\n\nTexti:\n{butur}\n\nGefðu svar á kvarðanum 0-10."
         try:
             sv = client.chat.completions.create(
                 model="gpt-3.5-turbo",
