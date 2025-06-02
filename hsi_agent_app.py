@@ -1,10 +1,10 @@
 import streamlit as st
 import fitz  # PyMuPDF
-import openai
 import os
+from openai import OpenAI
 
-# 🌍 Settu inn þinn eigin OpenAI lykil (ekki geyma opinbert)
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Eða skiptu bara beint: "sk-..."
+# 🌍 Settu inn þinn eigin OpenAI lykil sem secret
+client = OpenAI()
 
 def lesa_pdf_texta(path):
     doc = fitz.open(path)
@@ -26,7 +26,8 @@ def svara_spurningu(texti, spurning):
 
     Svar: 
     """
-    sv = openai.ChatCompletion.create(
+
+    sv = client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.2
