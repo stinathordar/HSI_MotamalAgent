@@ -2,8 +2,9 @@ import streamlit as st
 import fitz  # PyMuPDF
 import os
 from openai import OpenAI
+from openai import RateLimitError, AuthenticationError, APIConnectionError, OpenAIError
 
-# 🌍 Settu inn þinn eigin OpenAI lykil sem secret
+# 🌍 API viðskiptavinur
 client = OpenAI()
 
 def lesa_pdf_texta(path):
@@ -26,13 +27,22 @@ def svara_spurningu(texti, spurning):
 
     Svar: 
     """
+    try:
+        sv = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.2
+        )
+        return sv.choices[0].message.content.strip()
 
-    sv = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.2
-    )
-    return sv.choices[0].message.content.strip()
+    except RateLimitError:
+        return "⚠️ Villuupplýsingar: OpenAI takmarkaði aðgang. Gakktu úr skugga um að API-lykillinn sé virkur og með heimild (greiðslumáta)."
+    except AuthenticationError:
+        return "❌ Villa: API lykillinn virðist vera ógildur eða ekki rétt skilgreindur í Streamlit Secrets."
+    except APIConnectionError:
+        return "🔌 Tengivilla: Get ekki tengst OpenAI. Reyndu aftur síðar."
+    except OpenAIError as e:
+        return f"⚠️ Óvænt villa frá OpenAI: {str(e)}"
 
 # 🏠 Streamlit UI
 st.set_page_config(page_title="HSÍ Regluagent", page_icon="⚽")
