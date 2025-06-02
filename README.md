@@ -1,20 +1,24 @@
-# Regluagent HSÍ 🤾‍♂️
+# Regluagent HSÍ (LangChain útgáfa)
 
-Þetta app les úr PDF-skrá með reglugerð HSÍ um handknattleiksmót og svarar spurningum á íslensku. 
-Notendur geta spurt um leikreglur, viðurlög, aldursflokka o.fl.
+Þetta Streamlit app notar FAISS + OpenAI til að svara spurningum úr PDF reglugerð HSÍ.
 
-🚀 Keyrt með: Streamlit + GPT-4 eða GPT-3.5 + PDF reglugerð
+## 🔧 Keyrsla í fyrsta sinn (staðbundið)
 
-## Notkun
-1. Spyrðu spurningu um reglugerðina
-2. Appið notar OpenAI API til að svara út frá PDF skjalinu
-
-## Keyrsla (staðbundið)
 ```bash
 pip install -r requirements.txt
-streamlit run hsi_agent_app.py
+python generate_index.py       # Býr til FAISS gagnagrunn
+streamlit run hsi_agent_langchain.py
 ```
 
-## Hýsing
-Hægt er að hýsa appið á [streamlit.io/cloud](https://streamlit.io/cloud) 
-og skilgreina API-lykil sem Secret (`OPENAI_API_KEY`)
+## 📁 Skrár
+
+- `hsi_agent_langchain.py`: Streamlit forritið
+- `generate_index.py`: Skrá sem býr til `hsi_faiss_index/` úr PDF skránni
+- `Reglugerd-HSI-um-Handknattleiksmot-vor-2025.pdf`: PDF reglugerð
+- `requirements.txt`: Pakkar sem þarf
+
+## 💡 Notkun í Streamlit Cloud
+
+1. Bættu þessum skrám við GitHub repo
+2. Deploy appið með `hsi_agent_langchain.py` sem main file
+3. Geymslan byggir sjálfkrafa `hsi_faiss_index` ef hún er ekki til
